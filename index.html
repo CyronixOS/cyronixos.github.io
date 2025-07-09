@@ -10,12 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-blue: #0066ff;
-            --neon-blue-glow: rgba(0, 102, 255, 0.7);
-            --dark-bg: #0a0a15;
-            --card-bg: rgba(20, 20, 30, 0.85);
-            --text-light: #f0f0f0;
-            --text-muted: #aaa;
+            --primary-glow: rgba(217, 108, 255, 0.5);
+            --secondary-glow: rgba(108, 222, 255, 0.5);
+            --dark-bg: #03040B;
+            --card-bg: rgba(18, 16, 28, 0.6);
+            --text-light: #f0eff6;
+            --text-muted: #a9a4c2;
+            --gradient-main: linear-gradient(120deg, #d96cff 0%, #6cdeff 100%);
+            --gradient-secondary: linear-gradient(120deg, #a053ff 0%, #53c2ff 100%);
         }
         
         * {
@@ -35,44 +37,39 @@
             overflow-x: hidden;
             position: relative;
         }
-        
-        /* Stars background - Fixed version */
-        .stars {
+
+        /* Animated Gradient Background */
+        body::before {
+            content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 10% 20%, var(--primary-glow), transparent 40%),
+                radial-gradient(circle at 90% 80%, var(--secondary-glow), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(120, 120, 255, 0.2), transparent 50%);
+            animation: background-pan 30s linear infinite;
         }
-        
-        .star {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: float 20s linear infinite;
-            width: 2px;
-            height: 2px;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(100vh) translateX(-10vw); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-20vh) translateX(110vw); opacity: 0; }
+
+        @keyframes background-pan {
+            0% { background-position: 0% 0%, 0% 0%, 0% 0%; }
+            25% { background-position: 10% 20%, 80% 60%, 40% 50%; }
+            50% { background-position: 20% 40%, 60% 40%, 50% 60%; }
+            75% { background-position: 10% 20%, 80% 60%, 40% 50%; }
+            100% { background-position: 0% 0%, 0% 0%, 0% 0%; }
         }
         
         /* Header styles */
         header {
-            background-color: rgba(10, 10, 20, 0.9);
+            background-color: rgba(10, 10, 20, 0.6);
             padding: 1.5rem 3rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--neon-blue);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px) saturate(150%);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -90,8 +87,8 @@
         }
         
         .logo .os {
-            color: var(--neon-blue);
-            text-shadow: 0 0 15px var(--neon-blue-glow);
+            color: #d96cff;
+            text-shadow: 0 0 15px var(--primary-glow);
         }
         
         nav ul {
@@ -113,8 +110,8 @@
         }
         
         nav a:hover {
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue-glow);
+            color: #d96cff;
+            text-shadow: 0 0 10px var(--primary-glow);
         }
         
         nav a::after {
@@ -124,7 +121,7 @@
             height: 2px;
             bottom: -5px;
             left: 0;
-            background-color: var(--neon-blue);
+            background-image: var(--gradient-main);
             transform: scaleX(0);
             transform-origin: right;
             transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
@@ -146,18 +143,18 @@
         
         .hero {
             text-align: center;
-            margin-bottom: 5rem;
+            margin-bottom: 7rem;
             padding: 4rem 0;
         }
         
         .hero h1 {
             font-family: 'Inter', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-size: clamp(3rem, 7vw, 5.5rem);
             margin-bottom: 1.5rem;
-            text-shadow: 0 0 20px var(--neon-blue-glow);
+            text-shadow: 0 0 30px var(--primary-glow), 0 0 80px var(--secondary-glow);
             font-weight: 900;
-            line-height: 1.2;
-            background: linear-gradient(to right, var(--neon-blue), #66a3ff);
+            line-height: 1.1;
+            background: var(--gradient-main);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -176,13 +173,13 @@
             align-items: center;
             justify-content: center;
             gap: 0.7rem;
-            padding: 1rem 2.5rem;
+            padding: 1.1rem 2.8rem;
             font-family: 'DM Sans', sans-serif;
             font-weight: 700;
             font-size: 1.2rem;
             text-decoration: none;
             border-radius: 50px;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
             z-index: 1;
@@ -191,57 +188,32 @@
         }
         
         .btn-neon {
-            background-color: var(--neon-blue);
+            background-image: var(--gradient-secondary);
             color: white;
-            box-shadow: 0 0 15px rgba(0, 102, 255, 0.6),
-                        0 0 30px rgba(0, 102, 255, 0.4),
-                        0 0 45px rgba(0, 102, 255, 0.2);
-            position: relative;
+            box-shadow: 0 0 25px rgba(217, 108, 255, 0.4),
+                        0 0 50px rgba(108, 222, 255, 0.4);
         }
-        
-        .btn-neon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
-            );
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-        
+
         .btn-neon:hover {
-            background-color: #3385ff;
-            box-shadow: 0 0 20px rgba(0, 102, 255, 0.8),
-                        0 0 35px rgba(0, 102, 255, 0.6),
-                        0 0 50px rgba(0, 102, 255, 0.4);
-            transform: translateY(-3px);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 0 18px rgba(217, 108, 255, 0.25), 0 0 30px rgba(108, 222, 255, 0.18);
+            filter: none;
         }
-        
-        .btn-neon:hover::before {
-            transform: translateX(100%);
-        }
-        
+
         .btn-neon:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
         
-        /* Download section */
-        .download-section {
-            margin-top: 4rem;
+        /* Sections */
+        .download-section, .features {
+            margin-top: 8rem;
             text-align: center;
         }
         
         .section-title {
             font-family: 'Inter', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
+            font-size: 2.8rem;
+            margin-bottom: 4rem;
             position: relative;
             display: inline-block;
         }
@@ -249,47 +221,70 @@
         .section-title::after {
             content: '';
             position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(to right, var(--neon-blue), transparent);
-            border-radius: 3px;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 4px;
+            background: var(--gradient-main);
+            border-radius: 4px;
+            filter: blur(2px);
         }
         
-        .download-card {
-            background-color: var(--card-bg);
-            border-radius: 15px;
+        /* Card base style */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
             padding: 3rem 2rem;
             text-align: center;
-            border: 1px solid rgba(0, 102, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.4s ease;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(16px) saturate(180%);
             max-width: 600px;
             margin: 0 auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform-style: preserve-3d; /* For tilt effect */
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 32px rgba(217, 108, 255, 0.18), 0 2px 8px rgba(0,0,0,0.10);
+            border-color: #b47cff;
         }
         
-        .download-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.2);
-            border-color: var(--neon-blue);
+        .card::before { /* Gradient border glow */
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: var(--gradient-main);
+            z-index: -1;
+            filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .card:hover::before {
+            opacity: 0.25;
         }
         
         .download-icon {
-            font-size: 3.5rem;
-            color: var(--neon-blue);
+            font-size: 4rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 15px var(--primary-glow));
         }
         
-        .download-card h3 {
+        .card h3 {
             font-family: 'Inter', sans-serif;
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 1rem;
             color: var(--text-light);
         }
         
-        .download-card p {
+        .card p {
             color: var(--text-muted);
             margin-bottom: 2rem;
             font-size: 1.1rem;
@@ -298,114 +293,91 @@
         
         .version-badge {
             display: inline-block;
-            background-color: rgba(0, 102, 255, 0.2);
-            color: var(--neon-blue);
-            padding: 0.5rem 1.2rem;
+            background: rgba(217, 108, 255, 0.15);
+            color: #d96cff;
+            padding: 0.6rem 1.4rem;
             border-radius: 50px;
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            border: 1px solid var(--neon-blue);
+            border: 1px solid #d96cff;
         }
         
         .specs {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin: 2rem 0;
+            gap: 2rem;
+            margin: 2.5rem 0;
             flex-wrap: wrap;
         }
         
         .spec-item {
             display: flex;
             align-items: center;
-            gap: 0.7rem;
+            gap: 0.8rem;
             color: var(--text-muted);
+            font-size: 1.05rem;
         }
         
         .spec-item i {
-            color: var(--neon-blue);
+            color: #6cdeff;
+            text-shadow: 0 0 8px var(--secondary-glow);
         }
         
         /* Features section */
-        .features {
-            margin-top: 8rem;
-        }
-        
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2.5rem;
-            margin-top: 3rem;
+            margin-top: 4rem;
         }
         
         .feature-item {
-            background-color: var(--card-bg);
-            border-radius: 15px;
             padding: 2.5rem 2rem;
-            border: 1px solid rgba(0, 102, 255, 0.2);
-            transition: all 0.4s ease;
-            backdrop-filter: blur(8px);
-            text-align: center;
-        }
-        
-        .feature-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.1);
-            border-color: var(--neon-blue);
+            max-width: none; /* Override max-width from .card */
         }
         
         .feature-icon {
-            font-size: 2.5rem;
-            color: var(--neon-blue);
+            font-size: 3rem;
             margin-bottom: 1.5rem;
-        }
-        
-        .feature-item h3 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-light);
-        }
-        
-        .feature-item p {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            line-height: 1.7;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 12px var(--primary-glow));
         }
         
         /* Footer */
         footer {
-            background-color: rgba(10, 10, 20, 0.9);
-            padding: 3rem 2rem;
+            background-color: rgba(10, 10, 20, 0.7);
+            padding: 4rem 2rem;
             text-align: center;
-            border-top: 1px solid var(--neon-blue);
-            margin-top: 5rem;
-            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 8rem;
+            backdrop-filter: blur(12px);
         }
         
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            text-align: left;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 2rem;
         }
         
         .footer-column h3 {
             font-family: 'Inter', sans-serif;
             color: var(--text-light);
             margin-bottom: 1.5rem;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
         }
         
         .footer-links {
             list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 0.8rem;
+            display: flex;
+            gap: 2rem;
         }
         
         .footer-links a {
@@ -418,7 +390,22 @@
         }
         
         .footer-links a:hover {
-            color: var(--neon-blue);
+            color: #d96cff;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .footer-social a {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .footer-social a:hover {
+            color: #d96cff;
+            transform: translateY(-3px);
+            text-shadow: 0 0 10px var(--primary-glow);
         }
         
         .copyright {
@@ -431,88 +418,44 @@
         
         /* Responsive adjustments */
         @media (max-width: 992px) {
-            header {
-                padding: 1.5rem 2rem;
-            }
-            
-            nav ul {
-                gap: 1.5rem;
-            }
-            
-            .hero {
-                padding: 3rem 0;
-            }
+            header { padding: 1.5rem 2rem; }
+            nav ul { gap: 1.5rem; }
+            .hero { padding: 3rem 0; }
         }
         
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 1.5rem;
-                padding: 1.5rem;
-            }
-            
-            nav ul {
-                gap: 1.2rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .hero {
-                padding: 2rem 0 3rem;
-            }
-            
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .btn {
-                padding: 0.9rem 2rem;
-                font-size: 1.1rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
+            header { flex-direction: column; gap: 1.5rem; padding: 1.5rem; }
+            nav ul { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+            .hero { padding: 2rem 0 3rem; }
+            .hero h1 { font-size: 3.5rem; }
+            .hero p { font-size: 1.1rem; }
+            .btn { padding: 1rem 2.2rem; font-size: 1.1rem; }
+            .section-title { font-size: 2.2rem; }
         }
         
         @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
-            
-            .btn {
-                padding: 0.8rem 1.8rem;
-                font-size: 1rem;
-            }
-            
-            .download-card {
-                padding: 2rem 1.5rem;
-            }
-            
-            .feature-item {
-                padding: 2rem 1.5rem;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { font-size: 1rem; margin-bottom: 2rem; }
+            .btn { padding: 0.9rem 2rem; font-size: 1rem; }
+            .card { padding: 2rem 1.5rem; border-radius: 15px; }
+            .footer-links { flex-direction: column; gap: 1rem; }
+        }
+
+        /* Remove old animation classes to avoid conflicts */
+        header.header-visible, footer.footer-visible, .section-animate, .section-animate.visible, .card-animate, .card-animate.visible {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+
+        .feature-item:hover .feature-icon,
+        .download-card:hover .download-icon i {
+            transform: scale(1.07) rotate(-2deg);
+            filter: drop-shadow(0 0 6px var(--primary-glow));
         }
     </style>
 </head>
 <body>
-    <!-- Stars background -->
-    <div class="stars" id="stars"></div>
-    
     <header>
         <div class="logo">
             <span class="cyronix">Cyronix</span><span class="os">OS</span>
@@ -537,7 +480,7 @@
         
         <section id="download" class="download-section">
             <h2 class="section-title">Get CyronixOS</h2>
-            <div class="download-card">
+            <div class="download-card card">
                 <div class="download-icon">
                     <i class="fab fa-python"></i>
                 </div>
@@ -565,14 +508,14 @@
         <section id="features" class="features">
             <h2 class="section-title">Core Features</h2>
             <div class="features-grid">
-                <div class="feature-item">
+                <div class="feature-item card">
                     <div class="feature-icon">
                         <i class="fab fa-python"></i>
                     </div>
                     <h3>Python Native</h3>
                     <p>Entire OS built with Python, allowing developers to modify and extend the system with simple Python scripts.</p>
                 </div>
-                <div class="feature-item">
+                <div class="feature-item card">
                     <div class="feature-icon">
                         <i class="fas fa-puzzle-piece"></i>
                     </div>
@@ -593,6 +536,16 @@
                     <li><a href="#features"><i class="fas fa-chevron-right"></i> Features</a></li>
                 </ul>
             </div>
+            <div class="footer-social" style="flex-direction: column; align-items: center; gap: 1.2rem; margin-top: 2rem;">
+                <div style="display: flex; align-items: center; gap: 0.7rem; font-size: 1.2rem; color: #7289da;">
+                    <i class="fab fa-discord" style="font-size: 1.7rem;"></i>
+                    <span style="font-weight: 600; color: #7289da;">.xflsh</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; margin-top: 1.2rem;">
+                    <img src="https://raw.githubusercontent.com/CyronixOS/cyronixos.github.io/refs/heads/main/lol.jpg" alt=".xflsh profile picture" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 12px #00000033; border: 2px solid #d96cff; margin-bottom: 0.7rem;">
+                    <span style="color: var(--text-light); font-size: 1.1rem; font-weight: 500; text-shadow: 0 1px 8px #0008;">Hi this handsome guy made it :)</span>
+                </div>
+            </div>
         </div>
         
         <div class="copyright">
@@ -601,34 +554,6 @@
     </footer>
     
     <script>
-        // Create stars background - fixed version
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const starCount = 150;
-            
-            // Clear existing stars
-            starsContainer.innerHTML = '';
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                
-                // Fixed size
-                star.style.width = '2px';
-                star.style.height = '2px';
-                
-                // Random position
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                
-                // Fixed animation duration
-                star.style.animationDuration = '20s';
-                star.style.animationDelay = `${Math.random() * 5}s`;
-                
-                starsContainer.appendChild(star);
-            }
-        }
-        
         // Smooth scrolling for navigation links
         function setupSmoothScrolling() {
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -671,15 +596,32 @@
                 lastScroll = currentScroll;
             });
         }
+
+        // 3D Tilt Effect for cards
+        function setupTiltEffect() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const { width, height } = rect;
+                    const rotateX = (y - height / 2) / (height / 2) * -7;
+                    const rotateY = (x - width / 2) / (width / 2) * 7;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+                });
+            });
+        }
         
         // Initialize everything when DOM loads
         document.addEventListener('DOMContentLoaded', function() {
-            createStars();
             setupSmoothScrolling();
             setupHeaderScroll();
-            
-            // Recreate stars on resize to prevent gaps
-            window.addEventListener('resize', createStars);
+            setupTiltEffect();
         });
     </script>
 </body>
