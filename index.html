@@ -414,6 +414,12 @@
             gap: 0.7rem;
             font-size: 1.2rem;
             cursor: pointer;
+            text-decoration: none;
+        }
+        .footer-social a.discord-link:hover,
+        .footer-social a.discord-link:active,
+        .footer-social a.discord-link:focus {
+            text-decoration: none;
         }
         
         .copyright {
@@ -450,6 +456,9 @@
             .card { padding: 2rem 1.5rem; border-radius: 15px; }
             .footer-links { flex-direction: column; gap: 1rem; }
             .specs { gap: 1.5rem; }
+            header { padding: 0.7rem 0.7rem; }
+            .logo { font-size: 1.4rem; }
+            nav a { font-size: 0.95rem; }
         }
 
         /* Entrance Animations */
@@ -462,10 +471,21 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Header entrance animation (all devices) */
+        header.header-animate {
+            opacity: 0;
+            transform: translateY(-32px);
+            transition: opacity 0.7s cubic-bezier(0.65,0,0.35,1), transform 0.7s cubic-bezier(0.65,0,0.35,1);
+        }
+        header.header-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
-    <header>
+    <header class="header-animate">
         <div class="logo">
             <span class="cyronix">Cyronix</span><span class="os">OS</span>
         </div>
@@ -674,6 +694,9 @@
             setupTiltEffect();
             setupEntranceAnimations();
             setupDiscordCopy();
+            // Header entrance animation (all devices)
+            const header = document.querySelector('header');
+            setTimeout(() => header.classList.add('visible'), 100);
         });
     </script>
 </body>
