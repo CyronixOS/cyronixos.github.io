@@ -407,6 +407,14 @@
             transform: translateY(-3px);
             text-shadow: 0 0 10px var(--primary-glow);
         }
+
+        .footer-social a.discord-link {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
         
         .copyright {
             color: var(--text-muted);
@@ -427,31 +435,32 @@
             header { flex-direction: column; gap: 1.5rem; padding: 1.5rem; }
             nav ul { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
             .hero { padding: 2rem 0 3rem; }
-            .hero h1 { font-size: 3.5rem; }
+            .hero h1 { font-size: clamp(2.8rem, 10vw, 3.5rem); }
             .hero p { font-size: 1.1rem; }
             .btn { padding: 1rem 2.2rem; font-size: 1.1rem; }
-            .section-title { font-size: 2.2rem; }
+            .section-title { font-size: clamp(1.8rem, 8vw, 2.2rem); }
+            .features-grid { grid-template-columns: 1fr; }
+            .footer-content { gap: 1.5rem; }
         }
         
         @media (max-width: 480px) {
             .hero h1 { font-size: 2.8rem; }
-            .hero p { font-size: 1rem; margin-bottom: 2rem; }
+            .hero p { font-size: 1rem; margin-bottom: 2rem; line-height: 1.5; }
             .btn { padding: 0.9rem 2rem; font-size: 1rem; }
             .card { padding: 2rem 1.5rem; border-radius: 15px; }
             .footer-links { flex-direction: column; gap: 1rem; }
+            .specs { gap: 1.5rem; }
         }
 
-        /* Remove old animation classes to avoid conflicts */
-        header.header-visible, footer.footer-visible, .section-animate, .section-animate.visible, .card-animate, .card-animate.visible {
+        /* Entrance Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.65,0,0.35,1), transform 0.8s cubic-bezier(0.65,0,0.35,1);
+        }
+        .fade-in.visible {
             opacity: 1;
-            transform: none;
-            transition: none;
-        }
-
-        .feature-item:hover .feature-icon,
-        .download-card:hover .download-icon i {
-            transform: scale(1.07) rotate(-2deg);
-            filter: drop-shadow(0 0 6px var(--primary-glow));
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -470,7 +479,7 @@
     </header>
     
     <main>
-        <section id="home" class="hero">
+        <section id="home" class="hero fade-in">
             <h1>The Python-Powered Operating System</h1>
             <p>CyronixOS - a lightweight, flexible operating system built entirely with Python. Designed for developers who demand performance and simplicity.</p>
             <a href="https://www.mediafire.com/file/ct3n0zxxunlpjj5/CyronixOS.exe/file" class="btn btn-neon">
@@ -478,7 +487,7 @@
             </a>
         </section>
         
-        <section id="download" class="download-section">
+        <section id="download" class="download-section fade-in">
             <h2 class="section-title">Get CyronixOS</h2>
             <div class="download-card card">
                 <div class="download-icon">
@@ -505,7 +514,7 @@
             </div>
         </section>
         
-        <section id="features" class="features">
+        <section id="features" class="features fade-in">
             <h2 class="section-title">Core Features</h2>
             <div class="features-grid">
                 <div class="feature-item card">
@@ -536,15 +545,11 @@
                     <li><a href="#features"><i class="fas fa-chevron-right"></i> Features</a></li>
                 </ul>
             </div>
-            <div class="footer-social" style="flex-direction: column; align-items: center; gap: 1.2rem; margin-top: 2rem;">
-                <div style="display: flex; align-items: center; gap: 0.7rem; font-size: 1.2rem; color: #7289da;">
-                    <i class="fab fa-discord" style="font-size: 1.7rem;"></i>
-                    <span style="font-weight: 600; color: #7289da;">.xflsh</span>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center; margin-top: 1.2rem;">
-                    <img src="https://raw.githubusercontent.com/CyronixOS/cyronixos.github.io/refs/heads/main/lol.jpg" alt=".xflsh profile picture" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 12px #00000033; border: 2px solid #d96cff; margin-bottom: 0.7rem;">
-                    <span style="color: var(--text-light); font-size: 1.1rem; font-weight: 500; text-shadow: 0 1px 8px #0008;">Hi this handsome guy made it :)</span>
-                </div>
+             <div class="footer-social">
+                <a href="#" title="Click to copy username" id="discord-link" class="discord-link">
+                    <i class="fab fa-discord"></i>
+                    <span>.xflsh</span>
+                </a>
             </div>
         </div>
         
@@ -597,8 +602,13 @@
             });
         }
 
-        // 3D Tilt Effect for cards
+        // 3D Tilt Effect for cards - DESKTOP ONLY
         function setupTiltEffect() {
+            // Disable on touch devices or small screens for performance and usability
+            if ('ontouchstart' in window || window.innerWidth < 992) {
+                return;
+            }
+
             const cards = document.querySelectorAll('.card');
             cards.forEach(card => {
                 card.addEventListener('mousemove', (e) => {
@@ -617,11 +627,53 @@
             });
         }
         
+        // Simple fade-in animations for all devices
+        function setupEntranceAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Discord username copy functionality
+        function setupDiscordCopy() {
+            const discordLink = document.getElementById('discord-link');
+            if (!discordLink) return;
+
+            const originalText = discordLink.querySelector('span').textContent;
+
+            discordLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(originalText).then(() => {
+                    const span = discordLink.querySelector('span');
+                    span.textContent = 'Copied!';
+                    discordLink.style.color = '#6cdeff';
+
+                    setTimeout(() => {
+                        span.textContent = originalText;
+                        discordLink.style.color = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy username: ', err);
+                });
+            });
+        }
+
         // Initialize everything when DOM loads
         document.addEventListener('DOMContentLoaded', function() {
             setupSmoothScrolling();
             setupHeaderScroll();
             setupTiltEffect();
+            setupEntranceAnimations();
+            setupDiscordCopy();
         });
     </script>
 </body>
